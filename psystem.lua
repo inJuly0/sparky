@@ -9,7 +9,6 @@ math.randomseed(os.time())
 function PSystem:init(x, y, t, vx, vy, vr, w, h)
 	assert(x or y, 'expected number as Particle system coordinate.')
 	self.spawner = PSpawner(x, y, w or 0.5, h or 0.5, vx, vy, vr, t)
-	self.pvx, self.pvy = 0, 0
 	self.p_angular_speed = 0
 	self.particles = {}
 	self.time_elapsed = 0
@@ -34,7 +33,7 @@ function PSystem:set_particle_draw(f)
 end
 
 
-function PSystem:set_sys_velocity(vx, vy)
+function PSystem:set_velocity(vx, vy)
 	self.spawner.vx = vx
 	self.spawner.vy = vy
 end
@@ -51,13 +50,18 @@ end
 
 
 function PSystem:set_particle_velocity(x, y)
- 	self.pvx = x
- 	self.pvy = y
+ 	self.spawner.pvx = x
+ 	self.spawner.pvy = y
  end
 
 
 function PSystem:set_particle_angular_speed(wr)
 	self.p_angular_speed = wr
+end
+
+
+function PSystem:set_particle_randomness(v)
+	self.spawner.p_rand_factor = v 
 end
 
 
@@ -73,7 +77,7 @@ function PSystem:update(dt)
 
 	for i = #self.particles, 1, -1 do
 		local p = self.particles[i]
-		p:update(dt, self.pvx, self.pvy, self.p_angular_speed)
+		p:update(dt, self.p_angular_speed)
 		if not p.alive then 
 			table.remove(self.particles, i)
 		end
