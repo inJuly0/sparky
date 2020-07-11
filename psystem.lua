@@ -1,6 +1,7 @@
 local class = require('lib/middleclass')
 local PSpawner = require('pspawner')
 local Particle = require('particle')
+local Vec2 = require('lib/vector2')
 
 local PSystem = class('PSystem')
 
@@ -65,6 +66,14 @@ function PSystem:set_particle_randomness(v)
 end
 
 
+
+function PSystem:move_to(x, y)
+	self.spawner.pos.x = x
+	self.spawner.pos.y = y
+end
+
+
+
 function PSystem:update(dt)
 	self.time_elapsed = self.time_elapsed + dt
 	if self.time_elapsed >= self.spawn_rate then 
@@ -82,17 +91,25 @@ function PSystem:update(dt)
 			table.remove(self.particles, i)
 		end
 	end
-
+	
 	self.spawner:update(dt)
-
 end
 
 
 function PSystem:draw()
 	for i = 1, #self.particles do 
 		p = self.particles[i]
-		self.draw_particle(p.x, p.y, p.angle, p.sx, p.sy)
+		self.draw_particle(p.pos.x, p.pos.y, p.angle, p.sx, p.sy)
 	end
+end
+
+function PSystem:delete()
+	self.spawner:delete()
+	for i = 1, #self.particles do
+		self.particles[i]:delete()
+		self.particles[i] = nil
+	end
+	self.spawner = nil
 end
 
 
