@@ -13,8 +13,8 @@ function PSpawner:init(x, y, w, h, vx, vy, vr, t)
 		 'expected number as particle spawner location')
 	assert(type(w) == 'number' and type(h) == 'number',
 		 'expected number as particle spawner dimension')
-	self.particle_vel = Vec2:new(0, 0)
-	self.vel = Vec2:new(vx or 0, vy or 0)
+	self.particle_vel = Vec2(0, 0)
+	self.vel = Vec2(vx or 0, vy or 0)
 	self.angular_speed = vr or 0
 	self.particle_timer = t or 0.1
 	self.p_rand_factor = 0

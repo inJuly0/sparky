@@ -29,8 +29,9 @@ Vector2.__ge = function(v1, v2) return v1:mag() >= v2:mag() end
 
 function Vector2:new(_x, _y)
     local newVec = {}
+
     assert(type(_x) == 'number' and type(_y) == 'number',
-           'Expected number as vector parameter')
+           'Expected number as vector dimension')
 
     newVec.x, newVec.y = _x, _y
     self.__index = self
@@ -97,4 +98,9 @@ Vector2.UP = function() return Vector2:new(0, -1) end
 Vector2.DOWN = function() return Vector2:new(0, 1) end
 Vector2.ZERO = function() return Vector2:new(0, 0) end
 
-return Vector2
+
+return setmetatable(Vector2, {
+    __call = function(_, x, y)
+        return Vector2:new(x, y)
+    end
+})
